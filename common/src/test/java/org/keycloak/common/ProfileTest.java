@@ -32,7 +32,8 @@ public class ProfileTest {
     private static final Profile.Feature DEFAULT_FEATURE = Profile.Feature.CLIENT_POLICIES;
     private static final Profile.Feature DISABLED_BY_DEFAULT_FEATURE = Profile.Feature.DOCKER;
     private static final Profile.Feature PREVIEW_FEATURE = Profile.Feature.TOKEN_EXCHANGE;
-    private static final Profile.Feature EXPERIMENTAL_FEATURE = Profile.Feature.DYNAMIC_SCOPES;
+    private static final Profile.Feature EXPERIMENTAL_FEATURE = Profile.Feature.AUTHZEN;
+    private static final Profile.Feature DYNAMIC_SCOPES_FEATURE = Profile.Feature.DYNAMIC_SCOPES;
     private static Profile.Feature DEPRECATED_FEATURE = Profile.Feature.LOGIN_V1;
 
     @TempDir
@@ -44,6 +45,7 @@ public class ProfileTest {
         Assertions.assertEquals(Profile.Feature.Type.DISABLED_BY_DEFAULT, DISABLED_BY_DEFAULT_FEATURE.getType());
         Assertions.assertEquals(Profile.Feature.Type.PREVIEW, PREVIEW_FEATURE.getType());
         Assertions.assertEquals(Profile.Feature.Type.EXPERIMENTAL, EXPERIMENTAL_FEATURE.getType());
+        Assertions.assertEquals(Profile.Feature.Type.PREVIEW, DYNAMIC_SCOPES_FEATURE.getType());
 
         for (Profile.Feature feature : Profile.Feature.values()) {
             if (feature.getType().equals(Profile.Feature.Type.DEPRECATED)) {
@@ -76,6 +78,7 @@ public class ProfileTest {
         Assertions.assertFalse(Profile.isFeatureEnabled(EXPERIMENTAL_FEATURE));
         Assertions.assertFalse(EXPERIMENTAL_FEATURE.isDeprecated());
         assertThat(profile.getPreviewFeatures(), Matchers.not(Matchers.hasItem(EXPERIMENTAL_FEATURE)));
+        assertThat(profile.getPreviewFeatures(), Matchers.hasItem(DYNAMIC_SCOPES_FEATURE));
         if (DEPRECATED_FEATURE != null) {
             Assertions.assertFalse(Profile.isFeatureEnabled(DEPRECATED_FEATURE));
             assertThat(profile.getDeprecatedFeatures(), Matchers.hasItem(DEPRECATED_FEATURE));
